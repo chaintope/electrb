@@ -1,5 +1,3 @@
-require 'jsonrpctcp'
-
 module Electrb
 
   class Client
@@ -18,12 +16,8 @@ module Electrb
 
     def send_request(method, *args)
       method_name = method.to_s.gsub(/_/, '.')
-      begin
-        response = client.send(method_name, *args)
-        response['result']
-      rescue Jsonrpctcp::RPCError => e
-        raise Electrb::Error, e.message
-      end
+      response = client.send(method_name, *args)
+      response['result']
     end
 
   end
