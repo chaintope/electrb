@@ -1,8 +1,6 @@
-# Electrb
+# Electrb [![Build Status](https://travis-ci.org/chaintope/electrb.svg?branch=master)](https://travis-ci.org/chaintope/electrb) [![Gem Version](https://badge.fury.io/rb/electrb.svg)](https://badge.fury.io/rb/electrb) [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/electrb`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+A pure Ruby Electrum client library. This makes it easy to access electrum services using Ruby.
 
 ## Installation
 
@@ -22,22 +20,24 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### JSON-RPC access
 
-## Development
+Electrum server provides an [API](http://docs.electrum.org/en/latest/protocol.html) to access with JSON-RPC.
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+`Electrs::Client` can call Electrum's method by replacing `.` to `_` in the method name like follows:
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+```ruby
+require 'electrb'
 
-## Contributing
+client = Electrb::Client.new("localhost", 50001)
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/electrb. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+# get server version
+client.server_version(['1.9.5', '0.6'])
+=> ["electrs 0.7.0", "1.4"]
 
-## License
+# get transaction
+txid = 'd513c8fa051336fc8059958a7c99dc390c741a693503b67783392d0a84029bcb' 
+client.blockchain_transaction_get(txid)
+=> '02000000000101592110a2310082589362bc14e5dd5f6baad9705235995594aabacbc5b88e537f01000000171600142fd1a396731d8a4eb616791f7c1799eb6f446aacfeffffff02a5aba1800700000017a9146cfe9a5230d6a30815440ae32afe029f3864634287bcb720000000000017a914c6953679a4a0aeaf71317150b38e5b5cfae76415870247304402203c47f3d32e572bc4b382f2ecebeb34d1254936811d2e778cc107dfe5dc41663c02201a1eb3e73bf8f79578ec921c42436ba36ca95ace830311c26a9d15eb06a28d470121030af582d65f02f1ec50b466dd40bca58378d9117dcf443adaf1b14753a377539e94ea1700'
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Code of Conduct
-
-Everyone interacting in the Electrb project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/electrb/blob/master/CODE_OF_CONDUCT.md).
+```
