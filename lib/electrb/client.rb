@@ -8,14 +8,16 @@ module Electrb
       @client = Jsonrpctcp::Client.new(host, port)
     end
 
-    private
-
-    def method_missing(method, *args)
-      send_request(method, *args)
+    # Send RPC request.
+    # @param [String] method_name Method name to be called by RPC.
+    # @return [String] RPC result.
+    def request(method_name, *args)
+      send_request(method_name, *args)
     end
 
-    def send_request(method, *args)
-      method_name = method.to_s.gsub(/_/, '.')
+    private
+
+    def send_request(method_name, *args)
       response = client.send(method_name, *args)
       response['result']
     end
